@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Football Tournament</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static/font/lucide.css" />
+
+  <style>
+    :root {
+      --bg-primary: #030711;
+      --bg-secondary: #0b1121;
+      --glass: rgba(255, 255, 255, 0.08);
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.35);
+      --text-muted: rgba(255, 255, 255, 0.72);
+      --border: rgba(255, 255, 255, 0.15);
+      if (navLinks && navToggle && window.innerWidth <= 720) {
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    }, { passive: true });
+
+    navLinks?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 720 && navLinks.classList.contains('open')) {
+          navLinks.classList.remove('open');
+          navToggle.classList.remove('active');
+          navToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #102749, #030711 55%);
+      color: #fff;
+      min-height: 100vh;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    img {
+      display: block;
+    }
+
+    .page-shell {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-shell::before,
+    .page-shell::after {
+      content: "";
+      position: fixed;
+      inset: -200px auto auto -100px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+      filter: blur(60px);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+    .page-shell::after {
+      inset: auto -160px -80px auto;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(8, 145, 178, 0.2), transparent 70%);
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 14px min(5vw, 64px);
+      backdrop-filter: blur(16px);
+      background: rgba(3, 6, 24, 0.65);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      transition: max-height 0.3s ease;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: 0.25s;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: currentColor;
+      position: relative;
+      transition: 0.3s;
+    }
+
+    .nav-toggle span::before,
+    .nav-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 20px;
+      height: 2px;
+      background: currentColor;
+      transition: 0.3s;
+    }
+
+    .nav-toggle span::before {
+      top: -6px;
+    }
+
+    .nav-toggle span::after {
+      bottom: -6px;
+    }
+
+    .nav-toggle.active span {
+      background: transparent;
+    }
+
+    .nav-toggle.active span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .nav-toggle.active span::after {
+      bottom: 0;
+      transform: rotate(-45deg);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px min(5vw, 64px);
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(120deg, rgba(3, 7, 18, 0.7), rgba(10, 20, 40, 0.25)),
+        url("tournament_banner_2.png");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 48px;
+      width: min(1200px, 100%);
+      margin: 0 auto;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.75rem, 6vw, 4.75rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin: 20px 0;
+      text-transform: uppercase;
+    }
+
+    .hero-copy h1 span {
+      color: var(--accent);
+    }
+
+    .hero-copy p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      margin-top: 32px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      padding: 14px 28px;
+      border-radius: 14px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .cta-btn.primary {
+      background: var(--accent);
+      color: #031323;
+      box-shadow: 0 10px 35px rgba(56, 189, 248, 0.35);
+    }
+    .cta-btn.secondary {
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-panel {
+      background: rgba(6, 12, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .hero-panel img {
+      width: 160px;
+      margin: 0 auto;
+      filter: drop-shadow(0 20px 45px rgba(56, 189, 248, 0.6));
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+
+    .stat span {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .event-card {
+      padding: 24px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: var(--glass);
+      text-align: left;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      transition: 0.3s;
+    }
+
+    .event-card i {
+      font-size: 32px;
+      color: var(--accent);
+    }
+
+    .event-card strong {
+      display: block;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .event-card small {
+      color: var(--text-muted);
+    }
+
+    .event-card:hover {
+      border-color: var(--accent-soft);
+      background: rgba(56, 189, 248, 0.08);
+      transform: translateY(-2px);
+    }
+
+    section {
+      padding: 100px min(5vw, 64px);
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-head p {
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 12px auto 0;
+    }
+
+    .divider {
+      width: 80px;
+      height: 4px;
+      border-radius: 999px;
+      margin: 16px auto 0;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .downloads {
+      background: rgba(3, 6, 24, 0.65);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .download-card {
+      padding: 32px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background: rgba(11, 17, 33, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: 0 25px 60px rgba(3, 5, 20, 0.7);
+    }
+
+    .download-card h3 {
+      font-size: 1.5rem;
+    }
+
+    .download-card ul {
+      list-style: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .download-card ul li::before {
+      content: "•";
+      margin-right: 6px;
+      color: var(--accent);
+    }
+
+    .team-grid {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .team-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 28px 18px;
+      text-align: center;
+      transition: 0.4s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      min-height: 220px;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .team-card img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      margin: 0 auto;
+      filter: drop-shadow(0 18px 35px rgba(56, 189, 248, 0.55));
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      transform-origin: center;
+    }
+
+    .team-card .team-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+    }
+
+    .team-card:hover {
+      border-color: var(--accent-soft);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .team-card.open {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .team-card.open img {
+      transform: rotate(360deg) scale(0);
+      opacity: 0;
+    }
+
+    .team-card.open .team-name {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .cta-band {
+      margin-top: 80px;
+      text-align: center;
+      background: linear-gradient(120deg, rgba(56, 189, 248, 0.15), rgba(8, 145, 178, 0.15));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 28px;
+      padding: 48px 32px;
+      backdrop-filter: blur(10px);
+    }
+
+    footer {
+      padding: 32px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(3, 5, 20, 0.8);
+    }
+
+    .footer-credit a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.25s ease;
+    }
+
+    .footer-credit a:hover {
+      color: #7dd3fc;
+    }
+
+    .social-links {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .social-links a {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: 0.25s;
+    }
+
+    .social-links a svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .social-links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 720px) {
+      .site-nav {
+        flex-wrap: wrap;
+      }
+      .nav-toggle {
+        display: inline-flex;
+      }
+      .nav-links {
+        width: 100%;
+        flex-direction: column;
+        overflow: hidden;
+        max-height: 0;
+        padding-left: 0;
+      }
+      .nav-links.open {
+        max-height: 200px;
+        margin-top: 10px;
+      }
+      .nav-links a {
+        width: 100%;
+        border-radius: 12px;
+        padding: 10px 14px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: 60px;
+      }
+      section {
+        padding: 80px 24px;
+      }
+      .hero-panel {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="site-nav">
+      <div class="brand">
+        <img src="tournament_logo.png" alt="Tournament Logo">
+        FOOTBALL CUP
+      </div>
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+      </button>
+      <div class="nav-links" data-collapsible>
+        <a href="#home">Home</a>
+        <a href="#download">Downloads</a>
+        <a href="#teams">Teams</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <span class="pill">
+              <i class="lucide-trophy" aria-hidden="true"></i>
+              Inter Department Clash
+            </span>
+            <h1>Football <span>Tournament</span> 2025</h1>
+            <p>
+              University of Frontier Technology, Bangladesh. A full day of fierce rivalries,
+              champion-level skills, and pure campus pride. Cheer your batch as they battle for the ultimate glory.
+            </p>
+            <div class="hero-actions">
+              <button class="cta-btn primary" onclick="downloadFile('Team Form')">Register Your Squad</button>
+              <button class="cta-btn secondary" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">
+                See Match Plan
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-panel">
+            <img src="tournament_logo.png" alt="Tournament Emblem">
+            <div class="hero-stats">
+              <div class="stat">
+                <span>23</span>
+                Nov, Sunday
+              </div>
+              <div class="stat">
+                <span>9:00</span>
+                Kick-off
+              </div>
+              <div class="stat">
+                <span>05</span>
+                Departments
+              </div>
+            </div>
+
+            <div class="event-card">
+              <i class="lucide-clock"></i>
+              <div>
+                <strong>Morning Rally</strong>
+                <small>Teams assemble with captains' briefing</small>
+              </div>
+            </div>
+            <div class="event-card">
+              <i class="lucide-map-pin"></i>
+              <div>
+                <strong>UFTB Central Field</strong>
+                <small>High-performance turf with newly upgraded stands</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="downloads" id="download">
+        <div class="section-head">
+          <span class="pill">
+            <i class="lucide-download"></i>
+            Quick Assets
+          </span>
+          <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-top: 16px;">Tournament Resources</h2>
+          <p>Grab official documents to keep your team compliant and prepped.</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="info-grid">
+          <div class="download-card">
+            <h3>Match Schedule</h3>
+            <ul>
+              <li>Complete tournament timeline</li>
+              <li>Match fixtures and timings</li>
+              <li>Venue and field assignments</li>
+            </ul>
+            <button class="cta-btn primary" onclick="downloadFile('Match Schedule.pdf')">Download PDF</button>
+          </div>
+          <div class="download-card">
+            <h3>Tournament Rule Book</h3>
+            <ul>
+              <li>Match formats & tie-breakers</li>
+              <li>Disciplinary guidelines</li>
+              <li>Equipment & jersey code</li>
+            </ul>
+            <button class="cta-btn secondary" onclick="downloadFile('IDF-2025_RuleBook.pdf')">Download PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="teams">
+        <div class="section-head">
+          <span class="pill">
+            <i class="lucide-users"></i>
+            Squad Line-up
+          </span>
+          <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-top: 16px;">Participating Teams</h2>
+          <p>Each batch brings a unique style—technical precision, flair, and unstoppable chemistry.</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="team-grid">
+          <div class="team-card" tabindex="0" data-name="Electronics and Data Technology Engineering">
+            <img src="EDTE logo.png" alt="Team logo">
+            <div class="team-name">Educational Technology and Engineering</div>
+          </div>
+          <div class="team-card" tabindex="0" data-name="Internet of Things">
+            <img src="tournament_logo.png" alt="Team logo">
+            <div class="team-name">Internet of Things and Robotics Engineering</div>
+          </div>
+          <div class="team-card" tabindex="0" data-name="Data Science Engineering">
+            <img src="DSE logo.png" alt="Team logo">
+            <div class="team-name">Data Science Engineering</div>
+          </div>
+          <div class="team-card" tabindex="0" data-name="Software Engineering">
+            <img src="SE logo.png" alt="Team logo">
+            <div class="team-name">Software Engineering</div>
+          </div>
+          <div class="team-card" tabindex="0" data-name="Cybersecurity Engineering">
+            <img src="CYSE logo.png" alt="Team logo">
+            <div class="team-name">Cybersecurity Engineering</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="social-links">
+        <a href="https://www.facebook.com/uft.bangladesh/" target="_blank" rel="noreferrer" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 5 3.66 9.14 8.44 9.93v-7.03H7.9v-2.9h2.4V9.94c0-2.38 1.42-3.7 3.6-3.7 1.04 0 2.13.19 2.13.19v2.35h-1.2c-1.18 0-1.55.73-1.55 1.48v1.78h2.64l-.42 2.9h-2.22V22c4.78-.79 8.44-4.93 8.44-9.93Z"/>
+          </svg>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=100092518120179" target="_blank" rel="noreferrer" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 5 3.66 9.14 8.44 9.93v-7.03H7.9v-2.9h2.4V9.94c0-2.38 1.42-3.7 3.6-3.7 1.04 0 2.13.19 2.13.19v2.35h-1.2c-1.18 0-1.55.73-1.55 1.48v1.78h2.64l-.42 2.9h-2.22V22c4.78-.79 8.44-4.93 8.44-9.93Z"/>
+          </svg>
+        </a>
+      </div>
+      © 2025 University of Frontier Technology Football Tournament · All rights reserved.<br>
+      <span class="footer-credit">Created by <a href="https://www.facebook.com/" target="_blank" rel="noreferrer">Mostafa Shariare</a></span>
+    </footer>
+  </div>
+
+  <script>
+    function downloadFile(filename) {
+      const link = document.createElement('a');
+      link.href = filename;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    const teamCards = document.querySelectorAll('.team-card');
+
+    if (navToggle && navLinks) {
+      const collapseNav = () => {
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+      };
+
+      navToggle.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        navToggle.classList.toggle('active', isOpen);
+        navToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 720 && navLinks.classList.contains('open')) {
+            collapseNav();
+          }
+        });
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 720) {
+          collapseNav();
+        }
+      });
+    }
+
+    function toggleCard(card) {
+      const isOpen = card.classList.contains('open');
+      if (!isOpen) {
+        card.classList.add('open');
+      } else {
+        card.classList.remove('open');
+      }
+    }
+
+    teamCards.forEach(card => {
+      card.addEventListener('click', () => toggleCard(card));
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggleCard(card);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
