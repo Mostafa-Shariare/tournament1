@@ -20,22 +20,7 @@
       --accent-soft: rgba(56, 189, 248, 0.35);
       --text-muted: rgba(255, 255, 255, 0.72);
       --border: rgba(255, 255, 255, 0.15);
-      if (navLinks && navToggle && window.innerWidth <= 720) {
-        navLinks.classList.remove('open');
-        navToggle.classList.remove('active');
-        navToggle.setAttribute('aria-expanded', 'false');
-      }
-    }, { passive: true });
-
-    navLinks?.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        if (window.innerWidth <= 720 && navLinks.classList.contains('open')) {
-          navLinks.classList.remove('open');
-          navToggle.classList.remove('active');
-          navToggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    });
+    }
 
     * {
       margin: 0;
@@ -484,6 +469,94 @@
       transform: scale(1);
     }
 
+    .points-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .points-table thead {
+      background: rgba(56, 189, 248, 0.15);
+      border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .points-table th {
+      padding: 18px 16px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .points-table th:first-child,
+    .points-table td:first-child {
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .points-table th:last-child,
+    .points-table td:last-child {
+      text-align: center;
+    }
+
+    .points-table tbody tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: 0.3s;
+    }
+
+    .points-table tbody tr:hover {
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .points-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .points-table td {
+      padding: 16px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .points-table td:nth-child(2) {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .points-table td:last-child {
+      color: var(--accent);
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    @media (max-width: 768px) {
+      .points-table {
+        font-size: 0.85rem;
+      }
+      .points-table th,
+      .points-table td {
+        padding: 12px 8px;
+      }
+      .points-table th:nth-child(n+4),
+      .points-table td:nth-child(n+4) {
+        display: none;
+      }
+      .points-table th:nth-child(-n+3),
+      .points-table td:nth-child(-n+3) {
+        display: table-cell;
+      }
+      .points-table th:last-child,
+      .points-table td:last-child {
+        display: table-cell;
+      }
+    }
+
     .cta-band {
       margin-top: 80px;
       text-align: center;
@@ -598,6 +671,7 @@
         <a href="#home">Home</a>
         <a href="#download">Downloads</a>
         <a href="#teams">Teams</a>
+        <a href="#points-table">Points Table</a>
       </div>
     </header>
 
@@ -722,6 +796,99 @@
             <img src="CYSE logo.png" alt="Team logo">
             <div class="team-name">Cybersecurity Engineering</div>
           </div>
+        </div>
+      </section>
+
+      <section id="points-table">
+        <div class="section-head">
+          <span class="pill">
+            <i class="lucide-trophy"></i>
+            Tournament Standings
+          </span>
+          <h2 style="font-size: clamp(2rem, 4vw, 3rem); margin-top: 16px;">Points Table</h2>
+          <p>Current standings based on match results. Win = 3 points, Draw = 1 point, Loss = 0 points.</p>
+          <div class="divider"></div>
+        </div>
+
+        <div style="max-width: 1000px; margin: 0 auto; overflow-x: auto;">
+          <table class="points-table">
+            <thead>
+              <tr>
+                <th>Pos</th>
+                <th>Team</th>
+                <th>MP</th>
+                <th>W</th>
+                <th>D</th>
+                <th>L</th>
+                <th>GF</th>
+                <th>GA</th>
+                <th>GD</th>
+                <th>Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Software Engineering (SE)</td>
+                <td>2</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>2</td>
+                <td>1</td>
+                <td>+1</td>
+                <td><strong>4</strong></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Educational Technology and Engineering (Edte)</td>
+                <td>2</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>+1</td>
+                <td><strong>4</strong></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Data Science and Engineering (DSE)</td>
+                <td>2</td>
+                <td>0</td>
+                <td>2</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td><strong>2</strong></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>IOT and Robotics Engineering (IRE)</td>
+                <td>2</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>-1</td>
+                <td><strong>1</strong></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Cybersecurity Engineering (CySE)</td>
+                <td>2</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>-1</td>
+                <td><strong>1</strong></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
     </main>
